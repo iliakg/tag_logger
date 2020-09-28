@@ -18,7 +18,7 @@ $ gem install sample_filter
 First need to add configuration:
 ```ruby
 TagLogger.configure do |config|
-  config.output_path = "log/tag_logger.log"
+  config.output_path = 'log/tag_logger.log'
 end
 ```
 
