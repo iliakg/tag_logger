@@ -11,7 +11,7 @@ gem 'tag_logger'
 
 Or install it yourself as:
 ```bash
-$ gem install sample_filter
+$ gem install tag_logger
 ```
 
 ## Usage
