@@ -9,10 +9,11 @@ module TagLogger
         @tags = tags
       end
 
-      if TagLogger.configuration&.output_path.blank?
+      output_path = TagLogger.configuration&.output_path
+      if output_path.nil? || output_path.empty?
         raise 'TagLogger configuration `output_path` is blank!'
       else
-        @logger ||= Logger.new(TagLogger.configuration.output_path)
+        @logger ||= Logger.new(output_path)
       end
     end
 
