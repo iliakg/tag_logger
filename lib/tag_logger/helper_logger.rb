@@ -3,7 +3,7 @@ module TagLogger
     attr_reader :tags, :logger
 
     def initialize(tags)
-      if tags.blank?
+      if tags.empty?
         raise 'Tags for `tag_logger` are empty!'
       else
         @tags = tags
