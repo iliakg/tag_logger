@@ -17,9 +17,8 @@ module TagLogger
   end
 
   def sanitize_log(data)
-    raise '`sanitize_log` only for Hash' unless data.is_a?(Hash)
+    data = data.to_hash.transform_keys!(&:to_sym)
 
-    data.transform_keys!(&:to_sym)
     filter_parameters = TagLogger.configuration.filter_parameters
     filter_parameters.each do |key|
       next if data[key.to_sym].nil?
