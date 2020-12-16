@@ -19,10 +19,11 @@ module TagLogger
   def sanitize_log(data)
     raise '`sanitize_log` only for Hash' unless data.is_a?(Hash)
 
+    data.transform_keys!(&:to_sym)
     filter_parameters = TagLogger.configuration.filter_parameters
     filter_parameters.each do |key|
-      next if data[key].nil?
-      data[key] = FILTERED_TEXT
+      next if data[key.to_sym].nil?
+      data[key.to_sym] = FILTERED_TEXT
     end
 
     data
