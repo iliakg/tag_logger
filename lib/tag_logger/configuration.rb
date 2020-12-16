@@ -9,6 +9,10 @@ module TagLogger
   end
 
   class Configuration
-    attr_accessor :output_path
+    attr_accessor :output_path, :filter_parameters
+
+    def initialize
+      @filter_parameters = Array.new
+    end
   end
 end

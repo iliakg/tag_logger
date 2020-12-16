@@ -3,13 +3,15 @@ module TagLogger
     attr_reader :tags, :logger
 
     def initialize(tags)
+      raise 'TagLogger configuration is nil!' if TagLogger.configuration.nil?
+
       if tags.empty?
         raise 'Tags for `tag_logger` are empty!'
       else
         @tags = tags
       end
 
-      output_path = TagLogger.configuration&.output_path
+      output_path = TagLogger.configuration.output_path
       if output_path.nil? || output_path.empty?
         raise 'TagLogger configuration `output_path` is blank!'
       else
