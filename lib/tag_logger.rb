@@ -17,7 +17,7 @@ module TagLogger
   end
 
   def sanitize_log(data)
-    data = data.to_hash.transform_keys!(&:to_sym)
+    data = data.to_hash.transform_keys(&:to_sym)
 
     filter_parameters = TagLogger.configuration.filter_parameters
     filter_parameters.each do |key|
