@@ -1,22 +1,27 @@
 module TagLogger
   class HelperLogger
-    attr_reader :tags, :logger
+    attr_reader :tag_id, :tags, :path_logger, :stdout_logger
 
-    def initialize(tags)
+    def initialize(tags = [])
       raise 'TagLogger configuration is nil!' if TagLogger.configuration.nil?
 
-      if tags.empty?
-        raise 'Tags for `tag_logger` are empty!'
-      else
-        @tags = tags
-      end
+      @tag_id = rand(36**8).to_s(36)
+      @tags = tags
 
       output_path = TagLogger.configuration.output_path
-      if output_path.nil? || output_path.empty?
-        raise 'TagLogger configuration `output_path` is blank!'
-      else
-        @logger ||= Logger.new(output_path)
+      use_stdout = TagLogger.configuration.use_stdout
+
+      unless output_path.nil? || output_path.empty?
+        @path_logger ||= Logger.new(output_path)
+        path_logger.formatter = log_format
       end
+
+      if TagLogger.configuration.use_stdout == true
+        @stdout_logger ||= Logger.new(STDOUT)
+        stdout_logger.formatter = log_format
+      end
+
+      raise 'TagLogger output is blank!' if path_logger.nil? && stdout_logger.nil?
     end
 
     def write_log(type, text)
@@ -30,17 +35,27 @@ module TagLogger
 
       log_text = prepared_text(text)
       logger_class = types.fetch(type)
-      logger_class.log(logger, log_text)
+
+      logger_class.log(path_logger, log_text) if path_logger
+      logger_class.log(stdout_logger, log_text) if stdout_logger
     end
 
     private
 
     def prepared_text(text)
+      return text if tags.empty?
+
       ''.tap do |s|
         tags.each do |t|
           s << ("[#{t}]" + ' ')
           s << text if tags.last == t
         end
+      end
+    end
+
+    def log_format
+      proc do |severity, time, _program_name, message|
+        "#{time.utc.iso8601(3)} ##{Process.pid} TID-#{Thread.current.object_id.to_s(36)} TAG-#{tag_id} #{severity}: #{message}\n"
       end
     end
 

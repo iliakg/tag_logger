@@ -9,7 +9,7 @@ module TagLogger
   end
 
   class Configuration
-    attr_accessor :output_path, :filter_parameters
+    attr_accessor :output_path, :use_stdout, :filter_parameters
 
     def initialize
       @filter_parameters = Array.new

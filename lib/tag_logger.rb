@@ -9,11 +9,9 @@ module TagLogger
   end
 
   def log(type, text)
-    if @tag_logger.nil?
-      raise 'Initialize `tag_logger` method with tags name'
-    else
-      @tag_logger.write_log(type, text)
-    end
+    tag_logger if @tag_logger.nil?
+
+    @tag_logger.write_log(type, text)
   end
 
   def sanitize_log(data)

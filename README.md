@@ -20,6 +20,7 @@ First need to add configuration:
 TagLogger.configure do |config|
   config.output_path = 'log/tag_logger.log'
   config.filter_parameters = [:password]
+  config.use_stdout = true # STDOUT log isn't shown by default
 end
 ```
 
@@ -30,7 +31,7 @@ class MyClass
 
   def my_method
     # start logging with tags
-    tag_logger 'tag_name'
+    tag_logger 'tag_name', 'another_name'
 
     # then log with levels: [:warn, :info, :debug, :fatal, :error]
     log :info, 'Log information'
